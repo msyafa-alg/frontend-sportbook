@@ -109,7 +109,6 @@ export default function NavbarComponent() {
                             </Link>
                         </div>
                     )}
-                )}
                 </div>
             </div>
 
