@@ -111,8 +111,8 @@ export default function AdminBookings() {
                         onClick={() => getBookings(1, f.value)}
                         className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
                             filter === f.value
-                                ? "bg-orange-500 text-white"
-                                : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                                ? "bg-blue-500 text-white"
+                                : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
                         }`}
                     >
                         {f.label}
@@ -148,7 +148,7 @@ export default function AdminBookings() {
                                     <td className="px-5 py-3.5 text-gray-500 whitespace-nowrap">
                                         {b.start_time?.slice(0, 5)} – {b.end_time?.slice(0, 5)}
                                     </td>
-                                    <td className="px-5 py-3.5 font-semibold text-orange-500 whitespace-nowrap">
+                                    <td className="px-5 py-3.5 font-semibold text-blue-600 whitespace-nowrap">
                                         Rp {b.total_price?.toLocaleString("id-ID")}
                                     </td>
                                     <td className="px-5 py-3.5">

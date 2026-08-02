@@ -8,13 +8,17 @@ import { exportToExcel } from "../../utils/exportExcel";
 export default function AdminPayments() {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
-    async function getPayments() {
+    async function getPayments(p = 1) {
+        setLoading(true);
         try {
-            const result = await getAllPaymentsService();
+            const result = await getAllPaymentsService({ page: p, limit: 10 });
             setPayments(result.data.data);
-            setLoading(false);
-        } catch (error) { setLoading(false); }
+            setTotalPage(result.data.totalPage);
+            setPage(p);
+        } catch (error) { } finally { setLoading(false); }
     }
 
     useEffect(() => { getPayments(); }, []);
@@ -75,7 +79,7 @@ export default function AdminPayments() {
                                         {p.kode_pembayaran}
                                     </td>
                                     <td className="px-5 py-3.5 text-gray-600">{p.Booking?.Field?.name || "-"}</td>
-                                    <td className="px-5 py-3.5 font-semibold text-orange-500">
+                                    <td className="px-5 py-3.5 font-semibold text-blue-600">
                                         Rp {p.total_harga?.toLocaleString("id-ID")}
                                     </td>
                                     <td className="px-5 py-3.5">
@@ -96,6 +100,16 @@ export default function AdminPayments() {
                     </table>
                 </div>
             </div>
+
+            {totalPage > 1 && (
+                <div className="flex items-center gap-2 mt-4">
+                    <button disabled={page <= 1} onClick={() => getPayments(page - 1)}
+                        className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">Prev</button>
+                    <span className="text-xs text-gray-500">Halaman {page} / {totalPage}</span>
+                    <button disabled={page >= totalPage} onClick={() => getPayments(page + 1)}
+                        className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50">Next</button>
+                </div>
+            )}
         </div>
     );
 }

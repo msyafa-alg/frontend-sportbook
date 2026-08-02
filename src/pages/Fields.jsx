@@ -70,7 +70,7 @@ export default function Fields() {
             <div className="bg-gray-50 border-b border-gray-200 px-6 py-5">
                 <div className="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <h1 className="text-lg font-bold text-gray-900">
-                        Semua <span className="text-orange-500">Venue</span>
+                        Semua <span className="text-blue-600">Venue</span>
                     </h1>
 
                     <div className="flex gap-2 w-full md:w-auto">
@@ -82,7 +82,7 @@ export default function Fields() {
                                 placeholder="Cari nama lapangan..."
                                 value={search}
                                 onChange={processSearch}
-                                className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+                                className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
                             />
                         </div>
 
@@ -92,7 +92,7 @@ export default function Fields() {
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white text-gray-700 appearance-none cursor-pointer"
+                                className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-gray-700 appearance-none cursor-pointer"
                             >
                                 {SORT_OPTIONS.map((opt) => (
                                     <option key={opt.value} value={opt.value}>
@@ -124,8 +124,8 @@ export default function Fields() {
                                         onClick={() => applyCategory(cat)}
                                         className={`text-xs font-semibold px-4 py-1.5 rounded-full transition-colors ${
                                             search === cat
-                                                ? "bg-orange-500 text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-600"
+                                                ? "bg-blue-500 text-white"
+                                                : "bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-700"
                                         }`}
                                     >
                                         {cat}

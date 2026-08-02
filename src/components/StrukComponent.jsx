@@ -22,7 +22,7 @@ export default function StrukComponent({ booking, onClose }) {
                     <div className="flex gap-2">
                         <button
                             onClick={handlePrint}
-                            className="flex items-center gap-1 text-xs text-orange-500 border border-orange-200 px-3 py-1.5 rounded hover:bg-orange-50 transition-colors"
+                            className="flex items-center gap-1 text-xs text-blue-600 border border-blue-200 px-3 py-1.5 rounded hover:bg-blue-50 transition-colors"
                         >
                             <MdPrint /> Print
                         </button>
@@ -40,7 +40,7 @@ export default function StrukComponent({ booking, onClose }) {
                     {/* header */}
                     <div className="text-center mb-4 pb-4 border-b border-dashed border-gray-300">
                         <div className="flex justify-center mb-2">
-                            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                                 <MdSportsSoccer className="text-white text-xl" />
                             </div>
                         </div>
@@ -63,16 +63,16 @@ export default function StrukComponent({ booking, onClose }) {
                     {/* total */}
                     <div className="flex justify-between items-center font-bold text-base">
                         <span className="text-gray-700">Total</span>
-                        <span className="text-orange-500">
+                        <span className="text-blue-600">
                             Rp {booking.total_price?.toLocaleString("id-ID")}
                         </span>
                     </div>
 
                     {/* kode pembayaran */}
                     {booking.Payment && (
-                        <div className="mt-3 bg-orange-50 border border-orange-100 rounded p-3 text-center">
+                        <div className="mt-3 bg-blue-50 border border-blue-100 rounded p-3 text-center">
                             <p className="text-xs text-gray-500 mb-1">Kode Pembayaran</p>
-                            <p className="font-mono font-bold text-orange-600 text-base tracking-widest">
+                            <p className="font-mono font-bold text-blue-700 text-base tracking-widest">
                                 {booking.Payment.kode_pembayaran}
                             </p>
                             {booking.Payment.expired_at && (
@@ -86,7 +86,7 @@ export default function StrukComponent({ booking, onClose }) {
                     {/* status */}
                     <div className="mt-3 text-center">
                         <span className="text-xs text-gray-400">Status: </span>
-                        <span className="text-xs font-semibold text-orange-500 uppercase">
+                        <span className="text-xs font-semibold text-blue-600 uppercase">
                             {booking.status}
                         </span>
                     </div>

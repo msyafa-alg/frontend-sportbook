@@ -3,10 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes/index.jsx'
+import ToastProvider from './context/ToastContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* mendaftarkan / menggunakan routing dari routes/index.jsx */}
-    <RouterProvider router={router}></RouterProvider>
+    <ToastProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </ToastProvider>
   </StrictMode>,
 )

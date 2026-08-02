@@ -77,7 +77,7 @@ export default function MyBookings() {
             <div className="bg-gray-50 border-b border-gray-200 px-6 py-5">
                 <div className="container mx-auto">
                     <h1 className="text-lg font-bold text-gray-900">
-                        Riwayat <span className="text-orange-500">Booking</span>
+                        Riwayat <span className="text-blue-600">Booking</span>
                     </h1>
                 </div>
             </div>
@@ -109,12 +109,12 @@ export default function MyBookings() {
                             placeholder="Contoh: PAY-1717000000000"
                             value={kodePembayaran}
                             onChange={(e) => setKodePembayaran(e.target.value)}
-                            className="flex-1 border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                            className="flex-1 border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                         <button
                             onClick={handlePay}
                             disabled={payLoading}
-                            className="bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold px-5 py-2.5 rounded text-sm transition-colors whitespace-nowrap"
+                            className="bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-5 py-2.5 rounded text-sm transition-colors whitespace-nowrap"
                         >
                             {payLoading ? "Memproses..." : "BAYAR"}
                         </button>
@@ -129,8 +129,8 @@ export default function MyBookings() {
                             onClick={() => setFilter(f.value)}
                             className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
                                 filter === f.value
-                                    ? "bg-orange-500 text-white"
-                                    : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                                    ? "bg-blue-500 text-white"
+                                    : "bg-white border border-gray-200 text-gray-600 hover:border-blue-300"
                             }`}
                         >
                             {f.label}

@@ -8,6 +8,8 @@ import {
     MdBookOnline,
     MdCreditCard,
     MdGroup,
+    MdDiscount,
+    MdChat,
     MdLogout,
     MdMenu,
 } from "react-icons/md";
@@ -18,6 +20,8 @@ const menuItems = [
     { path: "/admin/bookings", label: "Booking", icon: MdBookOnline },
     { path: "/admin/payments", label: "Pembayaran", icon: MdCreditCard },
     { path: "/admin/users", label: "User", icon: MdGroup },
+    { path: "/admin/vouchers", label: "Voucher", icon: MdDiscount },
+    { path: "/admin/chat", label: "Chat", icon: MdChat },
 ];
 
 // AdminLayout dibungkus AuthProvider karena tidak pakai Template
@@ -52,7 +56,7 @@ function AdminLayoutInner() {
             <aside className={`${collapsed ? "w-16" : "w-56"} bg-[#1a1a2e] flex flex-col transition-all duration-200 shrink-0`}>
                 {/* logo */}
                 <div className="flex items-center gap-3 px-4 py-4 border-b border-white/10">
-                    <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shrink-0">
                         <MdSportsSoccer className="text-white text-lg" />
                     </div>
                     {!collapsed && (
@@ -76,7 +80,7 @@ function AdminLayoutInner() {
                                 to={item.path}
                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                                     active
-                                        ? "bg-orange-500 text-white"
+                                        ? "bg-blue-500 text-white"
                                         : "text-gray-400 hover:bg-white/10 hover:text-white"
                                 }`}
                             >
@@ -91,7 +95,7 @@ function AdminLayoutInner() {
                 <div className="border-t border-white/10 p-3">
                     {!collapsed && (
                         <div className="flex items-center gap-2 px-2 py-2 mb-1">
-                            <div className="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+                            <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
                                 {user?.name?.charAt(0).toUpperCase()}
                             </div>
                             <div className="overflow-hidden">
@@ -125,7 +129,7 @@ function AdminLayoutInner() {
                             {menuItems.find((m) => isActive(m))?.label || "Admin"}
                         </h1>
                     </div>
-                    <Link to="/" className="text-xs text-gray-400 hover:text-orange-500 transition-colors">
+                    <Link to="/" className="text-xs text-gray-400 hover:text-blue-600 transition-colors">
                         Lihat Website
                     </Link>
                 </header>

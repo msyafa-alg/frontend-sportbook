@@ -14,6 +14,7 @@ export default function AdminFields() {
     const [success, setSuccess] = useState("");
     const [submitLoading, setSubmitLoading] = useState(false);
     const [formValue, setFormValue] = useState({ name: "", sport_type: "", price_per_hour: "", description: "", image: null });
+    const [preview, setPreview] = useState(null);
 
     async function getFields() {
         try {
@@ -26,6 +27,7 @@ export default function AdminFields() {
     function openCreateModal() {
         setEditData(null);
         setFormValue({ name: "", sport_type: "", price_per_hour: "", description: "", image: null });
+        setPreview(null);
         setError("");
         setShowModal(true);
     }
@@ -33,6 +35,7 @@ export default function AdminFields() {
     function openEditModal(field) {
         setEditData(field);
         setFormValue({ name: field.name, sport_type: field.sport_type, price_per_hour: field.price_per_hour, description: field.description, image: null });
+        setPreview(null);
         setError("");
         setShowModal(true);
     }
@@ -105,7 +108,7 @@ export default function AdminFields() {
                     </button>
                     <button
                         onClick={openCreateModal}
-                        className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-4 py-2.5 rounded-lg transition-colors"
+                        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold text-sm px-4 py-2.5 rounded-lg transition-colors"
                     >
                         <HiPlus /> Tambah Lapangan
                     </button>
@@ -149,16 +152,16 @@ export default function AdminFields() {
                             <tr key={field.id} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-5 py-3.5 font-medium text-gray-900">{field.name}</td>
                                 <td className="px-5 py-3.5">
-                                    <span className="bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                    <span className="bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
                                         {field.sport_type}
                                     </span>
                                 </td>
-                                <td className="px-5 py-3.5 font-semibold text-orange-500">
+                                <td className="px-5 py-3.5 font-semibold text-blue-600">
                                     Rp {field.price_per_hour?.toLocaleString("id-ID")}
                                 </td>
                                 <td className="px-5 py-3.5">
                                     <div className="flex gap-2">
-                                        <button onClick={() => openEditModal(field)} className="flex items-center gap-1 text-xs font-semibold text-gray-600 border border-gray-200 hover:border-orange-300 hover:text-orange-500 px-3 py-1.5 rounded-lg transition-colors">
+                                        <button onClick={() => openEditModal(field)} className="flex items-center gap-1 text-xs font-semibold text-gray-600 border border-gray-200 hover:border-blue-300 hover:text-blue-600 px-3 py-1.5 rounded-lg transition-colors">
                                             <HiPencil /> Edit
                                         </button>
                                         <button onClick={() => handleDelete(field.id)} className="flex items-center gap-1 text-xs font-semibold text-red-500 border border-red-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
@@ -198,7 +201,7 @@ export default function AdminFields() {
                                         value={formValue[f.key]}
                                         placeholder={f.placeholder}
                                         onChange={(e) => setFormValue({ ...formValue, [f.key]: e.target.value })}
-                                        className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                        className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
                             ))}
@@ -209,16 +212,29 @@ export default function AdminFields() {
                                     value={formValue.description}
                                     placeholder="Deskripsi lapangan..."
                                     onChange={(e) => setFormValue({ ...formValue, description: e.target.value })}
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                                    className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
                                 />
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Gambar</label>
+                                {preview ? (
+                                    <div className="relative mb-3">
+                                        <img src={preview} alt="preview" className="w-full h-36 object-cover rounded-lg" />
+                                        <button onClick={() => { setPreview(null); setFormValue({ ...formValue, image: null }); }}
+                                            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white grid place-items-center text-xs">✕</button>
+                                    </div>
+                                ) : editData?.image && (
+                                    <img src={editData.image} alt="current" className="w-full h-36 object-cover rounded-lg mb-3" />
+                                )}
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => setFormValue({ ...formValue, image: e.target.files[0] })}
-                                    className="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100"
+                                    onChange={(e) => {
+                                        const f = e.target.files[0];
+                                        setFormValue({ ...formValue, image: f });
+                                        setPreview(f ? URL.createObjectURL(f) : null);
+                                    }}
+                                    className="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                 />
                             </div>
                         </div>
@@ -226,7 +242,7 @@ export default function AdminFields() {
                             <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                 Batal
                             </button>
-                            <button onClick={handleSubmit} disabled={submitLoading} className="px-5 py-2 text-sm font-bold bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white rounded-lg transition-colors">
+                            <button onClick={handleSubmit} disabled={submitLoading} className="px-5 py-2 text-sm font-bold bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-lg transition-colors">
                                 {submitLoading ? "Menyimpan..." : "Simpan"}
                             </button>
                         </div>

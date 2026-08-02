@@ -19,6 +19,7 @@ export default function FieldDetail() {
 
     const [slots, setSlots] = useState([]);
     const [slotsLoading, setSlotsLoading] = useState(false);
+    const [voucherCode, setVoucherCode] = useState("");
 
     const [formBooking, setFormBooking] = useState({
         booking_date: "",
@@ -100,6 +101,7 @@ export default function FieldDetail() {
                 booking_date: formBooking.booking_date,
                 start_time: formBooking.start_time,
                 end_time: formBooking.end_time,
+                voucher_code: voucherCode || undefined,
             });
 
             // navigate ke halaman struk, kirim data via state
@@ -135,7 +137,7 @@ export default function FieldDetail() {
                 <div className="container mx-auto">
                     <button
                         onClick={() => navigate(-1)}
-                        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-500 transition-colors"
+                        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors"
                     >
                         <MdArrowBack /> Kembali
                     </button>
@@ -169,7 +171,7 @@ export default function FieldDetail() {
                         </p>
                         <div className="border-t border-gray-200 pt-4">
                             <p className="text-xs text-gray-400 mb-1">Harga sewa per jam</p>
-                            <p className="text-2xl font-bold text-orange-500">
+                            <p className="text-2xl font-bold text-blue-600">
                                 Rp {field.price_per_hour?.toLocaleString("id-ID")}
                                 <span className="text-sm font-normal text-gray-400"> /jam</span>
                             </p>
@@ -196,7 +198,7 @@ export default function FieldDetail() {
                                         Kamu perlu login terlebih dahulu untuk memesan lapangan ini.
                                     </p>
                                     <Link to="/login">
-                                        <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-2.5 rounded transition-colors">
+                                        <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold text-sm py-2.5 rounded transition-colors">
                                             LOGIN
                                         </button>
                                     </Link>
@@ -218,7 +220,7 @@ export default function FieldDetail() {
                                             min={new Date().toISOString().split("T")[0]}
                                             value={formBooking.booking_date}
                                             onChange={(e) => onDateChange(e.target.value)}
-                                            className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                            className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                                         />
                                     </div>
 
@@ -252,10 +254,10 @@ export default function FieldDetail() {
                                                                         disabled
                                                                             ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed"
                                                                             : isStart
-                                                                            ? "bg-orange-500 text-white border-orange-500"
+                                                                            ? "bg-blue-500 text-white border-blue-500"
                                                                             : isInRange
-                                                                            ? "bg-orange-100 text-orange-700 border-orange-200"
-                                                                            : "bg-white text-gray-700 border-gray-200 hover:border-orange-300 hover:text-orange-500"
+                                                                            ? "bg-blue-100 text-blue-700 border-blue-200"
+                                                                            : "bg-white text-gray-700 border-gray-200 hover:border-blue-300 hover:text-blue-600"
                                                                     }`}
                                                                 >
                                                                     {slot.start.slice(0, 5)}
@@ -273,18 +275,34 @@ export default function FieldDetail() {
 
                                     {/* estimasi harga */}
                                     {estimasi > 0 && (
-                                        <div className="bg-orange-50 border border-orange-100 rounded px-3 py-2.5 flex justify-between items-center">
+                                        <div className="bg-blue-50 border border-blue-100 rounded px-3 py-2.5 flex justify-between items-center">
                                             <span className="text-xs text-gray-500">Estimasi total</span>
-                                            <span className="font-bold text-orange-500 text-sm">
+                                            <span className="font-bold text-blue-600 text-sm">
                                                 Rp {estimasi.toLocaleString("id-ID")}
                                             </span>
                                         </div>
                                     )}
 
+                                    {/* kode promo */}
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                            Kode Promo <span className="text-gray-300">(opsional)</span>
+                                        </label>
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={voucherCode}
+                                                onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                                                placeholder="Contoh: SPORT20"
+                                                className="flex-1 border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                            />
+                                        </div>
+                                    </div>
+
                                     <button
                                         onClick={handleBooking}
                                         disabled={bookingLoading}
-                                        className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded text-sm transition-colors"
+                                        className="w-full bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold py-3 rounded text-sm transition-colors"
                                     >
                                         {bookingLoading ? "Memproses..." : "BOOKING SEKARANG"}
                                     </button>

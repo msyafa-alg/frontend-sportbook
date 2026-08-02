@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     if (loading) return <LoadingComponent />;
 
     const statCards = [
-        { label: "Total Lapangan", value: stats.totalFields, icon: MdSportsSoccer, color: "bg-orange-50 text-orange-500" },
+        { label: "Total Lapangan", value: stats.totalFields, icon: MdSportsSoccer, color: "bg-blue-50 text-blue-600" },
         { label: "Total Booking", value: stats.totalBookings, icon: MdBookOnline, color: "bg-blue-50 text-blue-500" },
         { label: "Menunggu Approve", value: stats.pendingBookings, icon: MdPendingActions, color: "bg-yellow-50 text-yellow-500" },
         { label: "Booking Approved", value: stats.approvedBookings, icon: MdCheckCircle, color: "bg-green-50 text-green-500" },
@@ -46,14 +46,14 @@ export default function AdminDashboard() {
     return (
         <div>
             {/* banner */}
-            <div className="bg-orange-500 rounded-xl px-6 py-5 mb-6 flex items-center justify-between">
+            <div className="bg-blue-500 rounded-xl px-6 py-5 mb-6 flex items-center justify-between">
                 <div>
                     <h2 className="text-white font-bold text-lg">Dashboard Admin</h2>
-                    <p className="text-orange-100 text-sm mt-0.5">Kelola lapangan dan booking di sini</p>
+                    <p className="text-blue-100 text-sm mt-0.5">Kelola lapangan dan booking di sini</p>
                 </div>
                 <Link
                     to="/admin/fields"
-                    className="flex items-center gap-2 bg-white text-orange-500 font-bold text-sm px-4 py-2 rounded-lg hover:bg-orange-50 transition-colors"
+                    className="flex items-center gap-2 bg-white text-blue-600 font-bold text-sm px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors"
                 >
                     Tambah Lapangan <HiArrowRight />
                 </Link>
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-xl border border-gray-100">
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                     <h3 className="font-bold text-gray-900 text-sm">Booking Terbaru</h3>
-                    <Link to="/admin/bookings" className="text-xs text-orange-500 hover:underline flex items-center gap-1">
+                    <Link to="/admin/bookings" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
                         Lihat semua <HiArrowRight />
                     </Link>
                 </div>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
                                     <td className="px-5 py-3.5 font-medium text-gray-800">{b.User?.name || "-"}</td>
                                     <td className="px-5 py-3.5 text-gray-600">{b.Field?.name || "-"}</td>
                                     <td className="px-5 py-3.5 text-gray-500">{b.booking_date}</td>
-                                    <td className="px-5 py-3.5 font-semibold text-orange-500">
+                                    <td className="px-5 py-3.5 font-semibold text-blue-600">
                                         Rp {b.total_price?.toLocaleString("id-ID")}
                                     </td>
                                     <td className="px-5 py-3.5">

@@ -46,7 +46,7 @@ export default function Login() {
             <div className="w-full max-w-sm">
                 {/* logo */}
                 <div className="text-center mb-8">
-                    <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
                         <MdSportsSoccer className="text-white text-2xl" />
                     </div>
                     <h1 className="text-xl font-bold text-gray-900">Masuk ke SportBook</h1>
@@ -70,7 +70,7 @@ export default function Login() {
                                 placeholder="Masukkan username"
                                 onKeyUp={(e) => setFormValue({ ...formValue, username: e.target.value })}
                                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                         </div>
                         <div>
@@ -82,13 +82,13 @@ export default function Login() {
                                 placeholder="Masukkan password"
                                 onKeyUp={(e) => setFormValue({ ...formValue, password: e.target.value })}
                                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                         </div>
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-2.5 rounded text-sm transition-colors mt-1"
+                            className="w-full bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold py-2.5 rounded text-sm transition-colors mt-1"
                         >
                             {loading ? "Memproses..." : "LOGIN"}
                         </button>
@@ -96,7 +96,7 @@ export default function Login() {
 
                     <p className="text-center text-sm text-gray-500 mt-4">
                         Belum punya akun?{" "}
-                        <Link to="/register" className="text-orange-500 font-semibold hover:underline">
+                        <Link to="/register" className="text-blue-600 font-semibold hover:underline">
                             Register
                         </Link>
                     </p>

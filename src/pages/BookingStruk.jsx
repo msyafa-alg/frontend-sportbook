@@ -35,7 +35,7 @@ export default function BookingStruk() {
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-gray-500 mb-4">Data tidak ditemukan</p>
-                    <Link to="/" className="text-orange-500 hover:underline text-sm">
+                    <Link to="/" className="text-blue-600 hover:underline text-sm">
                         Kembali ke Beranda
                     </Link>
                 </div>
@@ -60,13 +60,13 @@ export default function BookingStruk() {
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
 
                     {/* header struk */}
-                    <div className="bg-orange-500 px-5 py-4 flex items-center gap-3">
+                    <div className="bg-blue-500 px-5 py-4 flex items-center gap-3">
                         <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
                             <MdSportsSoccer className="text-white text-xl" />
                         </div>
                         <div>
                             <p className="text-white font-bold text-base">SportBook</p>
-                            <p className="text-orange-100 text-xs">Booking Lapangan Olahraga</p>
+                            <p className="text-blue-100 text-xs">Booking Lapangan Olahraga</p>
                         </div>
                     </div>
 
@@ -81,28 +81,28 @@ export default function BookingStruk() {
                         <Row
                             label="Tanggal"
                             value={booking.booking_date}
-                            icon={<MdCalendarToday className="text-orange-400" />}
+                            icon={<MdCalendarToday className="text-blue-500" />}
                         />
                         <Row
                             label="Jam"
                             value={`${booking.start_time?.slice(0, 5)} - ${booking.end_time?.slice(0, 5)}`}
-                            icon={<MdAccessTime className="text-orange-400" />}
+                            icon={<MdAccessTime className="text-blue-500" />}
                         />
 
                         <div className="border-t border-dashed border-gray-200 my-1" />
 
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-500">Total Harga</span>
-                            <span className="text-lg font-bold text-orange-500">
+                            <span className="text-lg font-bold text-blue-600">
                                 Rp {booking.total_price?.toLocaleString("id-ID")}
                             </span>
                         </div>
                     </div>
 
                     {/* kotak kode pembayaran */}
-                    <div className="mx-5 mb-5 bg-orange-50 border border-orange-200 rounded-lg p-4 text-center">
+                    <div className="mx-5 mb-5 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                         <p className="text-xs text-gray-500 mb-1">Kode Pembayaran</p>
-                        <p className="font-mono font-bold text-orange-600 text-xl tracking-widest">
+                        <p className="font-mono font-bold text-blue-700 text-xl tracking-widest">
                             {payment.kode_pembayaran}
                         </p>
                         <p className="text-xs text-gray-400 mt-2">
@@ -154,7 +154,7 @@ export default function BookingStruk() {
                                 <MdArrowBack /> Kembali
                             </button>
                             <Link to="/my-bookings" className="flex-1">
-                                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-3 rounded-xl transition-colors">
+                                <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold text-sm py-3 rounded-xl transition-colors">
                                     Lihat Riwayat Booking
                                 </button>
                             </Link>

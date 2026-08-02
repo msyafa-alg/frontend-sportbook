@@ -1,0 +1,19 @@
+import { useEffect } from "react";
+
+const BASE = "SportBook";
+
+// set title & meta description per halaman (SPA-friendly)
+export function useSeo(title, description) {
+    useEffect(() => {
+        document.title = title ? `${title} — ${BASE}` : BASE;
+        if (description) {
+            let meta = document.querySelector('meta[name="description"]');
+            if (!meta) {
+                meta = document.createElement("meta");
+                meta.setAttribute("name", "description");
+                document.head.appendChild(meta);
+            }
+            meta.setAttribute("content", description);
+        }
+    }, [title, description]);
+}

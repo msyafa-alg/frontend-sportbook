@@ -90,7 +90,7 @@ export default function AdminUsers() {
                     placeholder="Cari nama / username / email..."
                     value={search}
                     onChange={(e) => doSearch(e.target.value)}
-                    className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>
 
@@ -134,7 +134,7 @@ export default function AdminUsers() {
                                         <p className="text-xs text-gray-400">@{u.username}{u.email ? ` • ${u.email}` : ""}</p>
                                     </td>
                                     <td className="px-5 py-3.5">
-                                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${u.role === "admin" ? "bg-orange-100 text-orange-600" : "bg-gray-100 text-gray-600"}`}>
+                                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${u.role === "admin" ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"}`}>
                                             {u.role}
                                         </span>
                                     </td>
@@ -149,7 +149,7 @@ export default function AdminUsers() {
                                                 <>
                                                     <button
                                                         onClick={() => handleRole(u.id, u.role === "admin" ? "user" : "admin")}
-                                                        className="text-xs font-semibold text-gray-600 border border-gray-200 hover:border-orange-300 hover:text-orange-500 px-2.5 py-1 rounded-lg transition-colors"
+                                                        className="text-xs font-semibold text-gray-600 border border-gray-200 hover:border-blue-300 hover:text-blue-600 px-2.5 py-1 rounded-lg transition-colors"
                                                     >
                                                         {u.role === "admin" ? "Jadikan User" : "Jadikan Admin"}
                                                     </button>
@@ -213,14 +213,14 @@ export default function AdminUsers() {
                                 value={resetPass}
                                 placeholder="Password baru (min 6 karakter)"
                                 onChange={(e) => setResetPass(e.target.value)}
-                                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                         </div>
                         <div className="flex justify-end gap-2 px-6 py-4 border-t border-gray-100">
                             <button onClick={() => setResetTarget(null)} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                 Batal
                             </button>
-                            <button onClick={handleReset} disabled={resetLoading} className="px-5 py-2 text-sm font-bold bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white rounded-lg transition-colors">
+                            <button onClick={handleReset} disabled={resetLoading} className="px-5 py-2 text-sm font-bold bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-lg transition-colors">
                                 {resetLoading ? "Menyimpan..." : "Reset"}
                             </button>
                         </div>
