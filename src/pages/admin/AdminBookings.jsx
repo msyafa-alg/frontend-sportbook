@@ -11,13 +11,22 @@ export default function AdminBookings() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [filter, setFilter] = useState("");
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
-    async function getBookings() {
+    async function getBookings(p = 1, status = "") {
+        setLoading(true);
         try {
-            const result = await getAllBookingsService();
+            const result = await getAllBookingsService({ page: p, limit: 10, status });
             setBookings(result.data.data);
+            setTotalPage(result.data.totalPage);
+            setFilter(status);
+            setPage(p);
             setLoading(false);
-        } catch (error) { setLoading(false); }
+        } catch (error) {
+            setLoading(false);
+        }
     }  
 
     async function handleApprove(id) {
@@ -88,6 +97,29 @@ export default function AdminBookings() {
                 </div>
             )}
 
+            <div className="flex flex-wrap gap-2 mb-4">
+                {[
+                    { value: "", label: "Semua" },
+                    { value: "waiting_payment", label: "Menunggu Bayar" },
+                    { value: "paid", label: "Sudah Bayar" },
+                    { value: "approved", label: "Disetujui" },
+                    { value: "rejected", label: "Ditolak" },
+                    { value: "cancelled", label: "Dibatalkan" },
+                ].map((f) => (
+                    <button
+                        key={f.value}
+                        onClick={() => getBookings(1, f.value)}
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                            filter === f.value
+                                ? "bg-orange-500 text-white"
+                                : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                        }`}
+                    >
+                        {f.label}
+                    </button>
+                ))}
+            </div>
+
             <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
@@ -128,7 +160,7 @@ export default function AdminBookings() {
                                                 <button onClick={() => handleApprove(b.id)} className="text-xs font-semibold text-green-600 border border-green-200 hover:bg-green-50 px-3 py-1.5 rounded-lg transition-colors">
                                                     Approve
                                                 </button>
-                                                <button onClick={() => handleReject(b.id)} className="text-xs font-semibold text-red-500 border border-red-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
+<button onClick={() => handleReject(b.id)} className="text-xs font-semibold text-red-500 border border-red-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
                                                     Reject
                                                 </button>
                                             </div>
@@ -148,6 +180,27 @@ export default function AdminBookings() {
                     </table>
                 </div>
             </div>
+
+            {/* pagination */}
+            {totalPage > 1 && (
+                <div className="flex items-center gap-2 mt-4">
+                    <button
+                        disabled={page <= 1}
+                        onClick={() => getBookings(page - 1, filter)}
+                        className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                    >
+                        Prev
+                    </button>
+                    <span className="text-xs text-gray-500">Halaman {page} / {totalPage}</span>
+                    <button
+                        disabled={page >= totalPage}
+                        onClick={() => getBookings(page + 1, filter)}
+                        className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

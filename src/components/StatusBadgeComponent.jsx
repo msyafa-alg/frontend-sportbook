@@ -7,6 +7,7 @@ export default function StatusBadgeComponent({ status }) {
         paid:            "bg-blue-100 text-blue-700",
         approved:        "bg-green-100 text-green-700",
         rejected:        "bg-red-100 text-red-600",
+        cancelled:       "bg-gray-200 text-gray-600",
     };
 
     const labelMap = {
@@ -15,6 +16,7 @@ export default function StatusBadgeComponent({ status }) {
         paid:            "Sudah Bayar",
         approved:        "Disetujui",
         rejected:        "Ditolak",
+        cancelled:       "Dibatalkan",
     };
 
     const style = styleMap[status] || "bg-gray-100 text-gray-600";

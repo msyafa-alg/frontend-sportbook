@@ -1,13 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { HiUser, HiClipboardList, HiLogout, HiChevronDown } from "react-icons/hi";
+import { HiUser, HiClipboardList, HiLogout, HiChevronDown, HiMenu, HiX } from "react-icons/hi";
 import { MdSportsSoccer } from "react-icons/md";
 
 export default function NavbarComponent() {
     const { isLogin, user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     function handleLogout() {
         logout();
@@ -37,6 +38,13 @@ export default function NavbarComponent() {
 
                 {/* auth area */}
                 <div className="flex items-center gap-3">
+                    {/* hamburger mobile */}
+                    <button
+                        onClick={() => setMobileOpen((o) => !o)}
+                        className="md:hidden text-gray-600 hover:text-orange-500 text-xl transition-colors"
+                    >
+                        {mobileOpen ? <HiX /> : <HiMenu />}
+                    </button>
                     {isLogin && user?.role === "admin" && (
                         <Link
                             to="/admin"
@@ -101,8 +109,32 @@ export default function NavbarComponent() {
                             </Link>
                         </div>
                     )}
+                )}
                 </div>
             </div>
+
+            {/* menu mobile */}
+            {mobileOpen && (
+                <div className="md:hidden border-t border-gray-100 bg-white px-6 py-3 flex flex-col gap-1">
+                    <Link to="/" onClick={() => setMobileOpen(false)} className="text-sm font-semibold text-gray-700 py-2 hover:text-orange-500">Home</Link>
+                    <Link to="/fields" onClick={() => setMobileOpen(false)} className="text-sm font-semibold text-gray-700 py-2 hover:text-orange-500">Venue</Link>
+                    {isLogin && (
+                        <Link to="/my-bookings" onClick={() => setMobileOpen(false)} className="text-sm font-semibold text-gray-700 py-2 hover:text-orange-500">Booking</Link>
+                    )}
+                    {isLogin && (
+                        <>
+                            <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-sm font-semibold text-gray-700 py-2 hover:text-orange-500">Profile</Link>
+                            <button onClick={() => { setMobileOpen(false); handleLogout(); }} className="text-left text-sm font-semibold text-red-500 py-2 hover:text-red-600">Keluar</button>
+                        </>
+                    )}
+                    {!isLogin && (
+                        <div className="flex gap-2 py-2">
+                            <Link to="/register" onClick={() => setMobileOpen(false)} className="flex-1 text-center text-sm font-bold text-gray-700 border border-gray-200 py-2 rounded">REGISTER</Link>
+                            <Link to="/login" onClick={() => setMobileOpen(false)} className="flex-1 text-center text-sm font-bold bg-orange-500 text-white py-2 rounded">LOGIN</Link>
+                        </div>
+                    )}
+                </div>
+            )}
         </nav>
     );
 }

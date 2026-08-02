@@ -1,7 +1,8 @@
 import StatusBadgeComponent from "./StatusBadgeComponent";
 import { MdCalendarToday, MdAccessTime } from "react-icons/md";
 
-export default function BookingCardComponent({ booking }) {
+export default function BookingCardComponent({ booking, onCancel }) {
+    const canCancel = ["pending", "waiting_payment"].includes(booking.status);
     return (
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-orange-200 transition-colors">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
@@ -40,6 +41,17 @@ export default function BookingCardComponent({ booking }) {
                         <p className="text-xs text-gray-400 mt-0.5">
                             Expired: {new Date(booking.Payment.expired_at).toLocaleString("id-ID")}
                         </p>
+                    </div>
+                )}
+            {/* tombol batalkan */}
+                {canCancel && onCancel && (
+                    <div className="mt-3">
+                        <button
+                            onClick={() => onCancel(booking.id)}
+                            className="text-xs font-semibold text-red-500 border border-red-100 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
+                        >
+                            Batalkan Booking
+                        </button>
                     </div>
                 )}
             </div>

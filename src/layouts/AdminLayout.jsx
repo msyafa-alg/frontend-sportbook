@@ -7,6 +7,7 @@ import {
     MdSportsSoccer,
     MdBookOnline,
     MdCreditCard,
+    MdGroup,
     MdLogout,
     MdMenu,
 } from "react-icons/md";
@@ -16,6 +17,7 @@ const menuItems = [
     { path: "/admin/fields", label: "Lapangan", icon: MdSportsSoccer },
     { path: "/admin/bookings", label: "Booking", icon: MdBookOnline },
     { path: "/admin/payments", label: "Pembayaran", icon: MdCreditCard },
+    { path: "/admin/users", label: "User", icon: MdGroup },
 ];
 
 // AdminLayout dibungkus AuthProvider karena tidak pakai Template

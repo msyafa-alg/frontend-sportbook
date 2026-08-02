@@ -2,9 +2,18 @@ import { useState, useEffect } from "react";
 import BookingCardComponent from "../components/BookingCardComponent";
 import LoadingComponent from "../components/LoadingComponent";
 import FooterComponent from "../components/FooterComponent";
-import { getMyBookingsService } from "../services/booking.service";
+import { getMyBookingsService, cancelBookingService } from "../services/booking.service";
 import { payBookingService } from "../services/payment.service";
 import { HiCheck, HiX, HiInformationCircle } from "react-icons/hi";
+
+const FILTERS = [
+    { value: "all", label: "Semua" },
+    { value: "waiting_payment", label: "Menunggu Bayar" },
+    { value: "paid", label: "Dibayar" },
+    { value: "approved", label: "Disetujui" },
+    { value: "rejected", label: "Ditolak" },
+    { value: "cancelled", label: "Dibatalkan" },
+];
 
 export default function MyBookings() {
     const [bookings, setBookings] = useState([]);
@@ -13,6 +22,7 @@ export default function MyBookings() {
     const [payLoading, setPayLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [filter, setFilter] = useState("all");
 
     async function getMyBookings() {
         try {
@@ -44,6 +54,22 @@ export default function MyBookings() {
     }
 
     useEffect(() => { getMyBookings(); }, []);
+
+    async function handleCancel(id) {
+        if (!confirm("Yakin ingin membatalkan booking ini?")) return;
+        setError("");
+        try {
+            await cancelBookingService(id);
+            setSuccess("Booking berhasil dibatalkan.");
+            getMyBookings();
+        } catch (error) {
+            setError(error.response?.data?.data || "Gagal membatalkan booking.");
+        }
+    }
+
+    const displayedBookings = filter === "all"
+        ? bookings
+        : bookings.filter((b) => b.status === filter);
 
     return (
         <>
@@ -95,18 +121,35 @@ export default function MyBookings() {
                     </div>
                 </div>
 
+                {/* filter status */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {FILTERS.map((f) => (
+                        <button
+                            key={f.value}
+                            onClick={() => setFilter(f.value)}
+                            className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                                filter === f.value
+                                    ? "bg-orange-500 text-white"
+                                    : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                            }`}
+                        >
+                            {f.label}
+                        </button>
+                    ))}
+                </div>
+
                 {/* daftar booking */}
                 {loading ? (
                     <LoadingComponent />
-                ) : bookings.length === 0 ? (
+                ) : displayedBookings.length === 0 ? (
                     <div className="text-center py-16 text-gray-400">
                         <p className="font-medium">Belum ada riwayat booking</p>
                         <p className="text-sm mt-1">Yuk, booking lapangan pertamamu</p>
                     </div>
                 ) : (
                     <div className="flex flex-col gap-3">
-                        {bookings.map((booking) => (
-                            <BookingCardComponent key={booking.id} booking={booking} />
+                        {displayedBookings.map((booking) => (
+                            <BookingCardComponent key={booking.id} booking={booking} onCancel={handleCancel} />
                         ))}
                     </div>
                 )}

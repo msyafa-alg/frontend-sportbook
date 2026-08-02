@@ -5,7 +5,7 @@ import { MdSportsSoccer } from "react-icons/md";
 import { HiX, HiCheck } from "react-icons/hi";
 
 export default function Register() {
-    const [formValue, setFormValue] = useState({ name: "", username: "", password: "" });
+    const [formValue, setFormValue] = useState({ name: "", username: "", password: "", email: "" });
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ export default function Register() {
     async function registerProcess() {
         setLoading(true);
         try {
-            await registerService(formValue.name, formValue.username, formValue.password);
+            await registerService(formValue.name, formValue.username, formValue.password, formValue.email);
             setSuccess("Akun berhasil dibuat! Mengarahkan ke login...");
             setTimeout(() => navigate("/login"), 1500);
         } catch (error) {
@@ -81,6 +81,17 @@ export default function Register() {
                                 type="text"
                                 placeholder="Contoh: budi123"
                                 onKeyUp={(e) => setFormValue({ ...formValue, username: e.target.value })}
+                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                Email <span className="text-gray-300">(opsional)</span>
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="Contoh: budi@email.com"
+                                onKeyUp={(e) => setFormValue({ ...formValue, email: e.target.value })}
                                 className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                             />
                         </div>

@@ -13,6 +13,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminFields from "../pages/admin/AdminFields";
 import AdminBookings from "../pages/admin/AdminBookings";
 import AdminPayments from "../pages/admin/AdminPayments";
+import AdminUsers from "../pages/admin/AdminUsers";
 import { auth, authAdmin } from "../middleware/auth";
 
 export const router = createBrowserRouter([
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
             { path: "/admin/fields", element: <AdminFields /> },
             { path: "/admin/bookings", element: <AdminBookings /> },
             { path: "/admin/payments", element: <AdminPayments /> },
+            { path: "/admin/users", element: <AdminUsers /> },
         ],
     },
 ]);

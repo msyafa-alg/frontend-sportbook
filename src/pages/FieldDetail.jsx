@@ -4,7 +4,7 @@ import { MdLock, MdArrowBack } from "react-icons/md";
 import { HiX } from "react-icons/hi";
 import LoadingComponent from "../components/LoadingComponent";
 import { getFieldByIdService } from "../services/field.service";
-import { createBookingService } from "../services/booking.service";
+import { getAvailableSlotsService, createBookingService } from "../services/booking.service";
 import { AuthContext } from "../context/AuthContext";
 
 export default function FieldDetail() {
@@ -16,6 +16,9 @@ export default function FieldDetail() {
     const [loading, setLoading] = useState(true);
     const [bookingLoading, setBookingLoading] = useState(false);
     const [error, setError] = useState("");
+
+    const [slots, setSlots] = useState([]);
+    const [slotsLoading, setSlotsLoading] = useState(false);
 
     const [formBooking, setFormBooking] = useState({
         booking_date: "",
@@ -31,6 +34,45 @@ export default function FieldDetail() {
         } catch (error) {
             setLoading(false);
         }
+    }
+
+    // ambil ketersediaan slot saat tanggal dipilih
+    async function loadSlots(date) {
+        if (!date) {
+            setSlots([]);
+            return;
+        }
+        setSlotsLoading(true);
+        try {
+            const result = await getAvailableSlotsService(id, date);
+            setSlots(result.data.slots || []);
+        } catch (e) {
+            setSlots([]);
+        } finally {
+            setSlotsLoading(false);
+        }
+    }
+
+    function onDateChange(value) {
+        setFormBooking({ booking_date: value, start_time: "", end_time: "" });
+        loadSlots(value);
+    }
+
+    // pilih slot : klik pertama = jam mulai, klik kedua = jam selesai
+    function selectSlot(slot) {
+        const idx = slots.findIndex((s) => s.start === slot.start);
+        // belum ada jam mulai, atau sudah pernah pilih selesai → mulai baru
+        if (!formBooking.start_time || formBooking.end_time) {
+            setFormBooking((prev) => ({ ...prev, start_time: slot.start, end_time: "" }));
+            return;
+        }
+        // sudah ada jam mulai → pilih sebagai jam selesai (harus setelahnya)
+        const startIdx = slots.findIndex((s) => s.start === formBooking.start_time);
+        if (idx <= startIdx) {
+            setFormBooking((prev) => ({ ...prev, start_time: slot.start, end_time: "" }));
+            return;
+        }
+        setFormBooking((prev) => ({ ...prev, end_time: slot.end }));
     }
 
     function hitungEstimasi() {
@@ -174,32 +216,60 @@ export default function FieldDetail() {
                                         <input
                                             type="date"
                                             min={new Date().toISOString().split("T")[0]}
-                                            onChange={(e) => setFormBooking({ ...formBooking, booking_date: e.target.value })}
+                                            value={formBooking.booking_date}
+                                            onChange={(e) => onDateChange(e.target.value)}
                                             className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                                         />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-3">
+
+                                    {/* peta slot ketersediaan */}
+                                    {formBooking.booking_date && (
                                         <div>
                                             <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                                Jam Mulai
+                                                Pilih Jam
                                             </label>
-                                            <input
-                                                type="time"
-                                                onChange={(e) => setFormBooking({ ...formBooking, start_time: e.target.value })}
-                                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                            />
+                                            {slotsLoading ? (
+                                                <p className="text-xs text-gray-400 py-2">Memuat slot...</p>
+                                            ) : slots.length === 0 ? (
+                                                <p className="text-xs text-gray-400 py-2">Tidak ada slot tersedia</p>
+                                            ) : (
+                                                <div>
+                                                    <div className="grid grid-cols-3 gap-1.5">
+                                                        {slots.map((slot, i) => {
+                                                            const isStart = formBooking.start_time === slot.start;
+                                                            const isInRange =
+                                                                formBooking.start_time &&
+                                                                formBooking.end_time &&
+                                                                slot.start >= formBooking.start_time &&
+                                                                slot.start < formBooking.end_time;
+                                                            const disabled = !slot.available;
+                                                            return (
+                                                                <button
+                                                                    key={i}
+                                                                    disabled={disabled}
+                                                                    onClick={() => selectSlot(slot)}
+                                                                    className={`text-xs font-semibold py-2 rounded transition-colors border ${
+                                                                        disabled
+                                                                            ? "bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed"
+                                                                            : isStart
+                                                                            ? "bg-orange-500 text-white border-orange-500"
+                                                                            : isInRange
+                                                                            ? "bg-orange-100 text-orange-700 border-orange-200"
+                                                                            : "bg-white text-gray-700 border-gray-200 hover:border-orange-300 hover:text-orange-500"
+                                                                    }`}
+                                                                >
+                                                                    {slot.start.slice(0, 5)}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <p className="text-[11px] text-gray-400 mt-2">
+                                                        Klik jam mulai, lalu klik jam selesai. Slot abu-abu sudah terisi.
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div>
-                                            <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                                Jam Selesai
-                                            </label>
-                                            <input
-                                                type="time"
-                                                onChange={(e) => setFormBooking({ ...formBooking, end_time: e.target.value })}
-                                                className="w-full border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                                            />
-                                        </div>
-                                    </div>
+                                    )}
 
                                     {/* estimasi harga */}
                                     {estimasi > 0 && (

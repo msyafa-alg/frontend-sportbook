@@ -17,6 +17,26 @@ export async function getBookingByIdService(id) {
     return response.data;
 }
 
+// cek ketersediaan slot lapangan pada tanggal tertentu
+export async function getAvailableSlotsService(fieldId, date) {
+    const response = await api.get("/bookings/slots/available", {
+        params: { fieldId, date },
+    });
+    return response.data;
+}
+
+// user : batalkan booking
+export async function cancelBookingService(id) {
+    const response = await api.put(`/bookings/${id}/cancel`);
+    return response.data;
+}
+
+// user : ubah jadwal booking
+export async function rescheduleBookingService(id, data) {
+    const response = await api.put(`/bookings/${id}/reschedule`, data);
+    return response.data;
+}
+
 // admin : ambil semua booking
 export async function getAllBookingsService(params = {}) {
     const response = await api.get("/bookings/admin/all", { params });

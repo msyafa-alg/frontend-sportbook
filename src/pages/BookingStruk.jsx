@@ -1,15 +1,33 @@
+import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { MdSportsSoccer, MdCalendarToday, MdAccessTime, MdArrowBack } from "react-icons/md";
 import { HiCheckCircle } from "react-icons/hi";
+import { payBookingService } from "../services/payment.service";
 
 // BookingStruk.jsx : halaman struk setelah booking berhasil
 // Data booking dikirim via navigate state (location.state)
 export default function BookingStruk() {
     const location = useLocation();
     const navigate = useNavigate();
+    const [payLoading, setPayLoading] = useState(false);
+    const [payError, setPayError] = useState("");
+    const [paySuccess, setPaySuccess] = useState(false);
 
     // ambil data dari state navigate
     const { booking, payment, field } = location.state || {};
+
+    async function handlePayNow() {
+        setPayLoading(true);
+        setPayError("");
+        try {
+            await payBookingService(payment.kode_pembayaran);
+            setPaySuccess(true);
+        } catch (error) {
+            setPayError(error.response?.data?.data || "Pembayaran gagal, coba lagi.");
+        } finally {
+            setPayLoading(false);
+        }
+    }
 
     // kalau tidak ada data (akses langsung via URL), redirect ke home
     if (!booking || !payment) {
@@ -110,20 +128,38 @@ export default function BookingStruk() {
 
                 </div>
 
-                {/* tombol navigasi */}
-                <div className="flex gap-3 mt-5">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-600 font-semibold text-sm py-3 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
-                        <MdArrowBack /> Kembali
-                    </button>
-                    <Link to="/my-bookings" className="flex-1">
-                        <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-3 rounded-xl transition-colors">
-                            Lihat Riwayat Booking
-                        </button>
-                    </Link>
-                </div>
+{/* tombol navigasi */}
+                    <div className="mt-5 flex flex-col gap-3">
+                        {!paySuccess ? (
+                            <button
+                                onClick={handlePayNow}
+                                disabled={payLoading}
+                                className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white font-bold text-sm py-3.5 rounded-xl transition-colors"
+                            >
+                                {payLoading ? "Memproses..." : "BAYAR SEKARANG"}
+                            </button>
+                        ) : (
+                            <div className="w-full bg-green-50 border border-green-200 text-green-700 text-sm font-semibold py-3.5 rounded-xl text-center">
+                                Pembayaran berhasil! Menunggu konfirmasi admin.
+                            </div>
+                        )}
+                        {payError && (
+                            <p className="text-xs text-red-500 text-center">{payError}</p>
+                        )}
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-600 font-semibold text-sm py-3 rounded-xl hover:bg-gray-50 transition-colors"
+                            >
+                                <MdArrowBack /> Kembali
+                            </button>
+                            <Link to="/my-bookings" className="flex-1">
+                                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-3 rounded-xl transition-colors">
+                                    Lihat Riwayat Booking
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
 
             </div>
         </div>

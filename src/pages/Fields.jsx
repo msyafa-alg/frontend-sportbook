@@ -55,6 +55,15 @@ export default function Fields() {
 
     const displayedFields = getSortedFields();
 
+    // daftar kategori olahraga unik dari data lapangan
+    const categories = [...new Set(fields.map((f) => f.sport_type).filter(Boolean))];
+
+    function applyCategory(sport) {
+        const val = sport === search ? "" : sport;
+        setSearch(val);
+        getFields(val);
+    }
+
     return (
         <>
             {/* sub-header */}
@@ -106,6 +115,24 @@ export default function Fields() {
                     </div>
                 ) : (
                     <>
+                        {/* filter kategori */}
+                        {categories.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {categories.map((cat) => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => applyCategory(cat)}
+                                        className={`text-xs font-semibold px-4 py-1.5 rounded-full transition-colors ${
+                                            search === cat
+                                                ? "bg-orange-500 text-white"
+                                                : "bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-600"
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         <p className="text-sm text-gray-400 mb-5">{displayedFields.length} venue ditemukan</p>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {displayedFields.map((field) => (
