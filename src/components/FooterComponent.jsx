@@ -4,8 +4,8 @@ import { MessageCircle, Send, Globe, Video, Mail, Phone, MapPin, ArrowRight } fr
 const QUICK = [
     { to: "/", label: "Beranda" },
     { to: "/fields", label: "Venue" },
+    { to: "/promo", label: "Promo & Voucher" },
     { to: "/my-bookings", label: "Riwayat Booking" },
-    { to: "/register", label: "Daftar" },
 ];
 
 const COMPANY = [

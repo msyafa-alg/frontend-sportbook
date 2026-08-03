@@ -14,6 +14,10 @@ import Privacy from "../pages/Privacy";
 import About from "../pages/About";
 import Faq from "../pages/Faq";
 import ChatPage from "../pages/ChatPage";
+import AccountDashboard from "../pages/AccountDashboard";
+import BookingDetailPage from "../pages/BookingDetailPage";
+import NotificationsPage from "../pages/NotificationsPage";
+import VouchersPage from "../pages/VouchersPage";
 import AdminChat from "../pages/admin/AdminChat";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminFields from "../pages/admin/AdminFields";
@@ -49,6 +53,10 @@ export const router = createBrowserRouter([
             { path: "/fields/:id", element: <FieldDetail /> },
             { path: "/my-bookings", element: <MyBookings /> },
             { path: "/profile", element: <Profile /> },
+            { path: "/account", element: <AccountDashboard /> },
+            { path: "/booking/:id", element: <BookingDetailPage /> },
+            { path: "/notifications", element: <NotificationsPage /> },
+            { path: "/promo", element: <VouchersPage /> },
             { path: "/chat", element: <ChatPage /> },
             { path: "/booking/struk", element: <BookingStruk /> },
         ],

@@ -103,13 +103,14 @@ export default function NavbarComponent() {
                                                 {user?.role}
                                             </span>
                                         </div>
-                                        <div className="py-1.5">
-                                            {user?.role === "admin" && (
-                                                <MenuLink to="/admin" icon={<LayoutDashboard />} onClick={() => setOpen(false)}>Admin Panel</MenuLink>
-                                            )}
-                                            <MenuLink to="/profile" icon={<CircleUserRound />} onClick={() => setOpen(false)}>Profile</MenuLink>
-                                            <MenuLink to="/my-bookings" icon={<CalendarDays />} onClick={() => setOpen(false)}>Riwayat Booking</MenuLink>
-                                            <MenuLink to={user?.role === "admin" ? "/admin/chat" : "/chat"} icon={<MessageSquare />} onClick={() => setOpen(false)}>Chat</MenuLink>
+<div className="py-1.5">
+                                             {user?.role === "admin" && (
+                                                 <MenuLink to="/admin" icon={<LayoutDashboard />} onClick={() => setOpen(false)}>Admin Panel</MenuLink>
+                                             )}
+                                             <MenuLink to="/account" icon={<LayoutDashboard />} onClick={() => setOpen(false)}>Dashboard Saya</MenuLink>
+                                             <MenuLink to="/profile" icon={<CircleUserRound />} onClick={() => setOpen(false)}>Profile</MenuLink>
+                                             <MenuLink to="/my-bookings" icon={<CalendarDays />} onClick={() => setOpen(false)}>Riwayat Booking</MenuLink>
+                                             <MenuLink to={user?.role === "admin" ? "/admin/chat" : "/chat"} icon={<MessageSquare />} onClick={() => setOpen(false)}>Chat</MenuLink>
                                             <hr className="my-1.5 border-line" />
                                             <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 font-medium transition-colors">
                                                 <LogOut className="w-[18px] h-[18px]" /> Keluar

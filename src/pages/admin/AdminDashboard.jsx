@@ -1,123 +1,101 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import LoadingComponent from "../../components/LoadingComponent";
-import { getAllBookingsService } from "../../services/booking.service";
-import { getFieldsService } from "../../services/field.service";
-import { MdSportsSoccer, MdBookOnline, MdPendingActions, MdCheckCircle } from "react-icons/md";
-import { HiArrowRight } from "react-icons/hi";
-import StatusBadgeComponent from "../../components/StatusBadgeComponent";
+import { getAdminStatsService } from "../../services/stats.service";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { CalendarCheck, ShieldAlert, Award, DollarSign, ArrowUpRight, TrendingUp } from "lucide-react";
 
 export default function AdminDashboard() {
-    const [stats, setStats] = useState({ totalFields: 0, totalBookings: 0, pendingBookings: 0, approvedBookings: 0 });
-    const [recentBookings, setRecentBookings] = useState([]);
+    const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    async function getStats() {
+    async function load() {
         try {
-            const [fieldsResult, bookingsResult] = await Promise.all([
-                getFieldsService(),
-                getAllBookingsService({ limit: 100 }),
-            ]);
-            const bookings = bookingsResult.data.data;
-            setStats({
-                totalFields: fieldsResult.data.length,
-                totalBookings: bookingsResult.data.total,
-                pendingBookings: bookings.filter((b) => b.status === "paid").length,
-                approvedBookings: bookings.filter((b) => b.status === "approved").length,
-            });
-            setRecentBookings(bookings.slice(0, 5));
-            setLoading(false);
-        } catch (error) {
+            const r = await getAdminStatsService();
+            setStats(r.data);
+        } catch (e) {
+            // handle error
+        } finally {
             setLoading(false);
         }
     }
 
-    useEffect(() => { getStats(); }, []);
+    useEffect(() => { load(); }, []);
 
-    if (loading) return <LoadingComponent />;
+    if (loading || !stats) return <LoadingComponent />;
 
-    const statCards = [
-        { label: "Total Lapangan", value: stats.totalFields, icon: MdSportsSoccer, color: "bg-blue-50 text-blue-600" },
-        { label: "Total Booking", value: stats.totalBookings, icon: MdBookOnline, color: "bg-blue-50 text-blue-500" },
-        { label: "Menunggu Approve", value: stats.pendingBookings, icon: MdPendingActions, color: "bg-yellow-50 text-yellow-500" },
-        { label: "Booking Approved", value: stats.approvedBookings, icon: MdCheckCircle, color: "bg-green-50 text-green-500" },
+    const cards = [
+        { label: "Total Booking", value: stats.statCards.totalBookings, icon: CalendarCheck, color: "text-blue-600 bg-blue-50" },
+        { label: "Booking Disetujui", value: stats.statCards.approved, icon: Award, color: "text-emerald-600 bg-emerald-50" },
+        { label: "Total Pendapatan", value: `Rp ${stats.statCards.revenue?.toLocaleString("id-ID")}`, icon: DollarSign, color: "text-indigo-600 bg-indigo-50" },
+        { label: "User Aktif", value: stats.statCards.totalUsers, icon: ShieldAlert, color: "text-amber-600 bg-amber-50" },
     ];
 
     return (
-        <div>
-            {/* banner */}
-            <div className="bg-blue-500 rounded-xl px-6 py-5 mb-6 flex items-center justify-between">
+        <div className="space-y-6">
+            <div className="bg-primary rounded-2xl p-6 text-white flex justify-between items-center shadow-lg shadow-primary/25">
                 <div>
-                    <h2 className="text-white font-bold text-lg">Dashboard Admin</h2>
-                    <p className="text-blue-100 text-sm mt-0.5">Kelola lapangan dan booking di sini</p>
+                    <h1 className="text-xl font-bold">Ringkasan Sistem</h1>
+                    <p className="text-blue-100 text-xs mt-0.5">Analisis pendapatan &amp; total transaksi booking lapangan.</p>
                 </div>
-                <Link
-                    to="/admin/fields"
-                    className="flex items-center gap-2 bg-white text-blue-600 font-bold text-sm px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors"
-                >
-                    Tambah Lapangan <HiArrowRight />
-                </Link>
             </div>
 
-            {/* stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {statCards.map((card) => {
-                    const Icon = card.icon;
+            {/* Stat Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {cards.map((c) => {
+                    const Icon = c.icon;
                     return (
-                        <div key={card.label} className="bg-white rounded-xl border border-gray-100 p-5">
-                            <div className="flex items-start justify-between mb-3">
-                                <p className="text-sm text-gray-500">{card.label}</p>
-                                <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${card.color}`}>
-                                    <Icon className="text-lg" />
-                                </div>
+                        <div key={c.label} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                            <div className="flex justify-between items-start mb-3">
+                                <span className="text-xs text-gray-500 font-semibold uppercase">{c.label}</span>
+                                <span className={`w-8 h-8 rounded-lg flex items-center justify-center ${c.color}`}><Icon className="w-4 h-4" /></span>
                             </div>
-                            <p className="text-3xl font-bold text-gray-900">{card.value}</p>
+                            <p className="text-2xl font-bold text-gray-900">{c.value}</p>
                         </div>
                     );
                 })}
             </div>
 
-            {/* tabel booking terbaru */}
-            <div className="bg-white rounded-xl border border-gray-100">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                    <h3 className="font-bold text-gray-900 text-sm">Booking Terbaru</h3>
-                    <Link to="/admin/bookings" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                        Lihat semua <HiArrowRight />
-                    </Link>
+            <div className="grid lg:grid-cols-3 gap-6">
+                {/* Chart Area */}
+                <div className="lg:col-span-2 bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <h3 className="font-bold text-gray-900 text-sm mb-4 flex items-center gap-1.5"><TrendingUp className="w-4 h-4 text-primary" /> Tren Booking (7 Hari Terakhir)</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={stats.daily} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2}/>
+                                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                                <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} />
+                                <YAxis stroke="#94a3b8" fontSize={11} />
+                                <Tooltip />
+                                <Area type="monotone" dataKey="count" name="Jumlah" stroke="#2563eb" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="border-b border-gray-50">
-                                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">User</th>
-                                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Lapangan</th>
-                                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Tanggal</th>
-                                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Total</th>
-                                <th className="text-left px-5 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-50">
-                            {recentBookings.length === 0 ? (
-                                <tr>
-                                    <td colSpan={5} className="text-center py-10 text-gray-400 text-sm">
-                                        Belum ada booking
-                                    </td>
-                                </tr>
-                            ) : recentBookings.map((b) => (
-                                <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-5 py-3.5 font-medium text-gray-800">{b.User?.name || "-"}</td>
-                                    <td className="px-5 py-3.5 text-gray-600">{b.Field?.name || "-"}</td>
-                                    <td className="px-5 py-3.5 text-gray-500">{b.booking_date}</td>
-                                    <td className="px-5 py-3.5 font-semibold text-blue-600">
-                                        Rp {b.total_price?.toLocaleString("id-ID")}
-                                    </td>
-                                    <td className="px-5 py-3.5">
-                                        <StatusBadgeComponent status={b.status} />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+
+                {/* Top Venues */}
+                <div className="lg:col-span-1 bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+                    <h3 className="font-bold text-gray-900 text-sm mb-4 flex items-center gap-1.5"><ArrowUpRight className="w-4 h-4 text-primary" /> Top Venue</h3>
+                    <div className="h-64">
+                        {stats.topVenues.length === 0 ? (
+                            <div className="h-full flex items-center justify-center text-xs text-gray-400">Belum ada data transaksi</div>
+                        ) : (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={stats.topVenues} layout="vertical" margin={{ top: 10, right: 10, left: -10, bottom: 10 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                                    <XAxis type="number" stroke="#94a3b8" fontSize={11} />
+                                    <YAxis dataKey="name" type="category" stroke="#94a3b8" fontSize={10} width={80} />
+                                    <Tooltip />
+                                    <Bar dataKey="count" name="Total Booking" fill="#2563eb" radius={[0, 4, 4, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
