@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { AuthContext } from "./context/AuthContext";
 import FieldCardComponent from "./components/FieldCardComponent";
 import FooterComponent from "./components/FooterComponent";
 import { SkeletonCard, EmptyState } from "./components/ui/State";
@@ -41,6 +42,7 @@ const fadeUp = {
 };
 
 export default function App() {
+    const { isLogin } = useContext(AuthContext);
     const [fields, setFields] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sport, setSport] = useState("");
@@ -261,10 +263,10 @@ export default function App() {
                     <div className="absolute -top-10 -right-6 text-white/10"><Disc size={220} /></div>
                     <div className="absolute -bottom-12 -left-8 text-white/10"><Volleyball size={200} /></div>
                     <div className="relative">
-                        <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight">Siap Main? <br /> Pesan Sekarang &amp; Dapatkan Diskon!</h2>
-                        <p className="mt-4 text-white/85 max-w-xl mx-auto">Daftar hari ini dan nikmati promo spesial untuk pemesanan pertamamu.</p>
-                        <Link to="/register" className="mt-8 inline-flex items-center gap-2 bg-white text-primary font-bold px-8 py-3.5 rounded-full shadow-xl hover:bg-slate-50 hover:-translate-y-0.5 transition-all">
-                            Daftar Sekarang <ArrowRight className="w-5 h-5" />
+                        <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight">Siap Main? <br /> {isLogin ? "Pesan Lapangan Favoritmu Sekarang!" : "Pesan Sekarang &amp; Dapatkan Diskon!"}</h2>
+                        <p className="mt-4 text-white/85 max-w-xl mx-auto">{isLogin ? "Pilih lapangan, tentukan jadwal, dan langsung main." : "Daftar hari ini dan nikmati promo spesial untuk pemesanan pertamamu."}</p>
+                        <Link to={isLogin ? "/fields" : "/register"} className="mt-8 inline-flex items-center gap-2 bg-white text-primary font-bold px-8 py-3.5 rounded-full shadow-xl hover:bg-slate-50 hover:-translate-y-0.5 transition-all">
+                            {isLogin ? "Cari Lapangan" : "Daftar Sekarang"} <ArrowRight className="w-5 h-5" />
                         </Link>
                     </div>
                 </motion.div>
